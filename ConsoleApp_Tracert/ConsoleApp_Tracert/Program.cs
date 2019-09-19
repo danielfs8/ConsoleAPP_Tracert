@@ -15,8 +15,9 @@ namespace ConsoleApp_Trace
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            GetTraceRoute("google.com");
+            Console.Write("IP ou Host: ");
+            GetTraceRoute(Console.ReadLine());
+           
         }
 
 
@@ -26,6 +27,7 @@ namespace ConsoleApp_Trace
 
         public static IEnumerable<IPAddress> GetTraceRoute(string hostNameOrAddress)
         {
+            Console.WriteLine(":::Inicializando análise de Rota:::\n");
             return GetTraceRoute(hostNameOrAddress, 1);
         }
         private static IEnumerable<IPAddress> GetTraceRoute(string hostNameOrAddress, int ttl)
@@ -46,16 +48,16 @@ namespace ConsoleApp_Trace
             }
             else if (reply.Status == IPStatus.TtlExpired || reply.Status == IPStatus.TimedOut)
             {
-                //add the currently returned address if an address was found with this TTL
+                // adicione o endereço retornado no momento se um endereço foi encontrado com este TTL
                 if (reply.Status == IPStatus.TtlExpired) result.Add(reply.Address);
-                //recurse to get the next address...
+                // recursão para obter o próximo endereço ...
                 IEnumerable<IPAddress> tempResult = default(IEnumerable<IPAddress>);
                 tempResult = GetTraceRoute(hostNameOrAddress, ttl + 1);
                 result.AddRange(tempResult);
             }
             else
             {
-                //failure 
+                //Falhou 
             }
 
 
